@@ -100,3 +100,51 @@ function createReverb(duration = 2, decay = 2, reverse = false) {
     impulseL[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, decay);
     impulseR[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, decay);
   }
+
+  const convolver = audioContext.createConvolver();
+  convolver.buffer = impulse;
+  return convolver;
+}
+
+function initAudio() {
+  audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  
+  osc1 = audioContext.createOscillator();
+  osc2 = audioContext.createOscillator();
+  osc3 = audioContext.createOscillator();
+  lfo = audioContext.createOscillator();
+  mainGain = audioContext.createGain();
+  reverbNode = createReverb(3, 3);
+
+  osc1.type = 'sine';
+  osc2.type = 'triangle';
+  osc3.type = 'sine';
+  lfo.type = 'sine';
+
+  osc1.frequency.setValueAtTime(220, audioContext.currentTime);
+  osc2.frequency.setValueAtTime(329.63, audioContext.currentTime);
+  osc3.frequency.setValueAtTime(440, audioContext.currentTime);
+  lfo.frequency.setValueAtTime(0.1, audioContext.currentTime);
+
+  mainGain.gain.setValueAtTime(0.1, audioContext.currentTime);
+
+  lfo.connect(mainGain.gain);
+  osc1.connect(mainGain);
+  osc2.connect(mainGain);
+  osc3.connect(mainGain);
+  mainGain.connect(reverbNode);
+  reverbNode.connect(audioContext.destination);
+
+  osc1.start();
+  osc2.start();
+  osc3.start();
+  lfo.start();
+
+  isAudioInitialized = true;
+}
+
+function updateAudio() {
+  if (!isAudioInitialized) return;
+
+  const normalizedSpeed = mouseSpeed / 50;
+  const normalizedDistance = mouseDistance / (Math.sqrt(canvas.width * canvas.width + canvas.height * canvas.height) / 2);
