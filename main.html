@@ -503,3 +503,51 @@ function animate(time) {
     case 9:
       drawParticles(time);
       break;
+case 10:
+      drawNebula(time);
+      break;
+    case 11:
+      drawLightning(time);
+      break;
+    case 12:
+      drawFireworks(time);
+      break;
+  }
+
+  hue = (hue + 1 + mouseSpeed / 5) % 360;
+  frame++;
+
+  updateAudio();
+
+  requestAnimationFrame(animate);
+}
+
+animate(0);
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  centerX = canvas.width / 2;
+  centerY = canvas.height / 2;
+}
+
+window.addEventListener('resize', resizeCanvas);
+
+fullscreenToggle.addEventListener('click', () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  }
+});
+
+document.addEventListener('fullscreenchange', () => {
+  if (document.fullscreenElement) {
+    fullscreenToggle.textContent = 'Exit Fullscreen';
+  } else {
+    fullscreenToggle.textContent = 'Enter Fullscreen';
+  }
+  resizeCanvas();
+});
