@@ -455,3 +455,51 @@ function drawFireworks(time) {
 
       const px = x + Math.cos(angle) * radius;
       const py = y + Math.sin(angle) * radius;
+
+      ctx.beginPath();
+      ctx.arc(px, py, 1 + mouseSpeed / 20, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${(hueOffset + i * 360 / particleCount) % 360}, 100%, 50%, ${0.7 - radius / (speed * 20)})`;
+      ctx.fill();
+    }
+  }
+}
+
+function animate(time) {
+  ctx.fillStyle = `rgba(0, 0, 0, ${0.05 + mouseSpeed / 1000})`;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  switch (visualMode) {
+    case 0:
+      drawKaleidoscope(time);
+      break;
+    case 1:
+      drawSpiral(time);
+      break;
+    case 2:
+      const fractalCount = 6 + Math.floor(mouseSpeed / 5);
+      for (let i = 0; i < fractalCount; i++) {
+        const angle = (Math.PI * 2 / fractalCount) * i + time / 2000;
+        drawFractal(centerX, centerY, 100 + mouseDistance / 2, angle, 5);
+      }
+      break;
+    case 3:
+      drawCircles(time);
+      break;
+    case 4:
+      drawWaves(time);
+      break;
+    case 5:
+      drawStarburst(time);
+      break;
+    case 6:
+      drawVortex(time);
+      break;
+    case 7:
+      drawLissajous(time);
+      break;
+    case 8:
+      drawMandala(time);
+      break;
+    case 9:
+      drawParticles(time);
+      break;
