@@ -602,3 +602,19 @@ canvas.addEventListener('touchmove', (e) => {
   mouseX = newMouseX;
   mouseY = newMouseY;
 }, { passive: false });
+
+canvas.addEventListener('mouseleave', () => {
+  mouseSpeed = 0;
+});
+
+canvas.addEventListener('touchend', () => {
+  mouseSpeed = 0;
+});
+
+// Hide instructions after 10 seconds
+setTimeout(() => {
+  instructions.style.transition = 'opacity 1s';
+  instructions.style.opacity = '0';
+}, 10000);
+</script>
+</body></html>
