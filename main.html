@@ -97,3 +97,54 @@ function initAudio() {
 
   isAudioInitialized = true;
 }
+
+function updateAudio() {
+  if (!isAudioInitialized) return;
+
+  const normalizedSpeed = mouseSpeed / 50;
+  const normalizedDistance = mouseDistance / (Math.sqrt(canvas.width * canvas.width + canvas.height * canvas.height) / 2);
+
+  osc1.frequency.setValueAtTime(220 + normalizedSpeed * 110, audioContext.currentTime);
+  osc2.frequency.setValueAtTime(329.63 + normalizedDistance * 165, audioContext.currentTime);
+  osc3.frequency.setValueAtTime(440 + (normalizedSpeed + normalizedDistance) * 110, audioContext.currentTime);
+  
+  lfo.frequency.setValueAtTime(0.1 + normalizedSpeed * 0.4, audioContext.currentTime);
+  
+  mainGain.gain.setValueAtTime(0.1 + normalizedDistance * 0.1, audioContext.currentTime);
+}
+
+function drawKaleidoscope(time) {
+  const segments = 8 + Math.floor(mouseSpeed / 5);
+  const size = Math.min(canvas.width, canvas.height) * 0.4;
+  
+  ctx.save();
+  ctx.translate(centerX, centerY);
+  
+  for (let i = 0; i < segments; i++) {
+    ctx.save();
+    ctx.rotate((Math.PI * 2 / segments) * i);
+    
+    ctx.beginPath();
+    for (let j = 0; j < 100; j++) {
+      const t = j / 100;
+      const radius = size * t * (1 + mouseDistance / 1000);
+      const angle = Math.PI * 2 * t + time / 1000;
+      const x = radius * Math.cos(angle);
+      const y = radius * Math.sin(angle);
+      
+      if (j === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+    }
+    
+    ctx.strokeStyle = `hsla(${(hue + i * 360 / segments) % 360}, 100%, 50%, 0.5)`;
+    ctx.lineWidth = 2 + mouseSpeed / 20;
+    ctx.stroke();
+    
+    ctx.restore();
+  }
+  
+  ctx.restore();
+}
