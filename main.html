@@ -148,3 +148,49 @@ function drawKaleidoscope(time) {
   
   ctx.restore();
 }
+
+function drawSpiral(time) {
+  ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+  ctx.lineWidth = 2 + mouseSpeed / 10;
+  ctx.beginPath();
+
+  const spiralIntensity = mouseDistance / 50;
+  const spiralCount = 5 + Math.floor(mouseSpeed / 5);
+
+  for (let i = 0; i < 200; i++) {
+    const angle = 0.1 * i + time / 1000 + spiralIntensity;
+    const radius = 5 * i + mouseSpeed * 2;
+    for (let j = 0; j < spiralCount; j++) {
+      const offsetAngle = (Math.PI * 2 / spiralCount) * j;
+      const x = centerX + radius * Math.cos(angle + offsetAngle);
+      const y = centerY + radius * Math.sin(angle + offsetAngle);
+      
+      if (i === 0 && j === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+    }
+  }
+
+  ctx.stroke();
+}
+
+function drawFractal(x, y, size, angle, depth) {
+  if (depth === 0) return;
+
+  const newSize = size * (0.7 + mouseSpeed / 500);
+  const newX = x + Math.cos(angle) * size;
+  const newY = y + Math.sin(angle) * size;
+
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(newX, newY);
+  ctx.strokeStyle = `hsl(${(hue + depth * 30 + mouseDistance) % 360}, 100%, 50%)`;
+  ctx.lineWidth = 2 + (5 - depth) * mouseSpeed / 50;
+  ctx.stroke();
+
+  const angleOffset = 0.5 + (mouseDistance / canvas.width) * 0.4;
+  drawFractal(newX, newY, newSize, angle - angleOffset, depth - 1);
+  drawFractal(newX, newY, newSize, angle + angleOffset, depth - 1);
+}
