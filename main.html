@@ -301,3 +301,51 @@ function drawLissajous(time) {
   ctx.lineWidth = 2 + mouseSpeed / 20;
   ctx.stroke();
 }
+
+function drawMandala(time) {
+  const petals = 12 + Math.floor(mouseSpeed / 5);
+  const radius = Math.min(canvas.width, canvas.height) * 0.4;
+  const innerRadius = radius * 0.2;
+  
+  for (let i = 0; i < petals; i++) {
+    const angle = (Math.PI * 2 / petals) * i;
+    const petalSize = radius * (0.5 + 0.5 * Math.sin(time / 1000 + i * 0.5)) * (1 + mouseDistance / 1000);
+    
+    ctx.beginPath();
+    ctx.moveTo(centerX + innerRadius * Math.cos(angle), centerY + innerRadius * Math.sin(angle));
+    ctx.quadraticCurveTo(
+      centerX + petalSize * Math.cos(angle + Math.PI / 4),
+      centerY + petalSize * Math.sin(angle + Math.PI / 4),
+      centerX + innerRadius * Math.cos(angle + Math.PI / 2),
+      centerY + innerRadius * Math.sin(angle + Math.PI / 2)
+    );
+    ctx.quadraticCurveTo(
+      centerX + petalSize * Math.cos(angle - Math.PI / 4),
+      centerY + petalSize * Math.sin(angle - Math.PI / 4),
+      centerX + innerRadius * Math.cos(angle),
+      centerY + innerRadius * Math.sin(angle)
+    );
+    
+    ctx.strokeStyle = `hsla(${(hue + i * 360 / petals) % 360}, 100%, 50%, 0.7)`;
+    ctx.lineWidth = 2 + mouseSpeed / 20;
+    ctx.stroke();
+  }
+}
+
+function drawParticles(time) {
+  const particleCount = 200 + Math.floor(mouseSpeed * 5);
+  const maxRadius = Math.min(canvas.width, canvas.height) / 2;
+  
+  for (let i = 0; i < particleCount; i++) {
+    const t = i / particleCount;
+    const angle = Math.PI * 2 * t + time / 1000;
+    const radius = maxRadius * Math.sqrt(t) * (1 + mouseDistance / 1000);
+    const x = centerX + radius * Math.cos(angle);
+    const y = centerY + radius * Math.sin(angle);
+    
+    ctx.beginPath();
+    ctx.arc(x, y, 2 + mouseSpeed / 10, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(${(hue + i * 360 / particleCount) % 360}, 100%, 50%, 0.7)`;
+    ctx.fill();
+  }
+}
