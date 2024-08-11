@@ -468,3 +468,56 @@ function animate(time) {
       drawFireworks(time);
       break;
   }
+
+  hue = (hue + 1 + mouseSpeed / 5) % 360;
+  frame++;
+
+  updateAudio();
+
+  requestAnimationFrame(animate);
+}
+
+animate(0);
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  centerX = canvas.width / 2;
+  centerY = canvas.height / 2;
+}
+
+window.addEventListener('resize', resizeCanvas);
+
+fullscreenToggle.addEventListener('click', () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  }
+});
+
+document.addEventListener('fullscreenchange', () => {
+  if (document.fullscreenElement) {
+    fullscreenToggle.textContent = 'Exit Fullscreen';
+  } else {
+    fullscreenToggle.textContent = 'Enter Fullscreen';
+  }
+  resizeCanvas();
+});
+
+audioToggle.addEventListener('click', () => {
+  if (!isAudioInitialized) {
+    initAudio();
+    audioToggle.textContent = 'Stop Audio';
+  } else {
+    if (audioContext.state === 'running') {
+      audioContext.suspend();
+      audioToggle.textContent = 'Resume Audio';
+    } else if (audioContext.state === 'suspended') {
+      audioContext.resume();
+      audioToggle.textContent = 'Stop Audio';
+    }
+  }
+});
