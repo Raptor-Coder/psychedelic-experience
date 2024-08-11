@@ -1,0 +1,51 @@
+<html>
+<head>
+<title>Psychedelic Experience</title>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<button id="fullscreenToggle">Toggle Fullscreen</button>
+<button id="audioToggle">Start Audio</button>
+<div id="instructions">
+  <h2>Instructions:</h2>
+  <ul>
+    <li>Move your mouse or finger to interact with the visualization</li>
+    <li>Click or tap anywhere to change the visual mode</li>
+    <li>Use the buttons at the bottom to toggle fullscreen and audio</li>
+    <li>Enjoy the psychedelic experience!</li>
+  </ul>
+</div>
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const fullscreenToggle = document.getElementById('fullscreenToggle');
+const audioToggle = document.getElementById('audioToggle');
+const instructions = document.getElementById('instructions');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let centerX = canvas.width / 2;
+let centerY = canvas.height / 2;
+
+let hue = 0;
+let frame = 0;
+let mouseX = 0;
+let mouseY = 0;
+let mouseSpeed = 0;
+let mouseDistance = 0;
+
+let visualMode = 0;
+const totalModes = 13; // Increased number of modes
+
+// Audio context and nodes
+let audioContext;
+let osc1, osc2, osc3, lfo, mainGain, reverbNode;
+let isAudioInitialized = false;
+
+function createReverb(duration = 2, decay = 2, reverse = false) {
+  const sampleRate = audioContext.sampleRate;
+  const length = sampleRate * duration;
+  const impulse = audioContext.createBuffer(2, length, sampleRate);
+  const impulseL = impulse.getChannelData(0);
+  const impulseR = impulse.getChannelData(1);
