@@ -251,3 +251,53 @@ function drawStarburst(time) {
     ctx.stroke();
   }
 }
+
+function drawVortex(time) {
+  const spirals = 5 + Math.floor(mouseSpeed / 10);
+  const points = 200;
+  const maxRadius = Math.min(canvas.width, canvas.height) / 2;
+  
+  for (let s = 0; s < spirals; s++) {
+    ctx.beginPath();
+    for (let i = 0; i < points; i++) {
+      const t = i / points;
+      const angle = 2 * Math.PI * (s / spirals + 10 * t) + time / 1000;
+      const radius = t * maxRadius * (1 + mouseDistance / 1000);
+      const x = centerX + radius * Math.cos(angle);
+      const y = centerY + radius * Math.sin(angle);
+      
+      if (i === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+    }
+    ctx.strokeStyle = `hsla(${(hue + s * 360 / spirals) % 360}, 100%, 50%, 0.5)`;
+    ctx.lineWidth = 2 + mouseSpeed / 20;
+    ctx.stroke();
+  }
+}
+
+function drawLissajous(time) {
+  const size = Math.min(canvas.width, canvas.height) * 0.4;
+  const points = 1000;
+  const a = 3 + mouseSpeed / 10;
+  const b = 2 + mouseDistance / 100;
+  
+  ctx.beginPath();
+  for (let i = 0; i < points; i++) {
+    const t = (i / points) * Math.PI * 2;
+    const x = centerX + size * Math.sin(a * t + time / 1000);
+    const y = centerY + size * Math.sin(b * t);
+    
+    if (i === 0) {
+      ctx.moveTo(x, y);
+    } else {
+      ctx.lineTo(x, y);
+    }
+  }
+  
+  ctx.strokeStyle = `hsla(${hue}, 100%, 50%, 0.5)`;
+  ctx.lineWidth = 2 + mouseSpeed / 20;
+  ctx.stroke();
+}
