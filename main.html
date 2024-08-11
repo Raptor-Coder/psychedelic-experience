@@ -521,3 +521,47 @@ audioToggle.addEventListener('click', () => {
     }
   }
 });
+
+canvas.addEventListener('click', () => {
+  visualMode = (visualMode + 1) % totalModes;
+});
+
+canvas.addEventListener('mousemove', (e) => {
+  const newMouseX = e.clientX;
+  const newMouseY = e.clientY;
+  
+  const dx = newMouseX - mouseX;
+  const dy = newMouseY - mouseY;
+  mouseSpeed = Math.sqrt(dx * dx + dy * dy);
+  mouseSpeed = Math.min(mouseSpeed, 50);  // Cap the speed
+
+  mouseDistance = Math.sqrt((newMouseX - centerX) ** 2 + (newMouseY - centerY) ** 2);
+
+  mouseX = newMouseX;
+  mouseY = newMouseY;
+});
+
+canvas.addEventListener('touchmove', (e) => {
+  e.preventDefault();
+  const touch = e.touches[0];
+  const newMouseX = touch.clientX;
+  const newMouseY = touch.clientY;
+  
+  const dx = newMouseX - mouseX;
+  const dy = newMouseY - mouseY;
+  mouseSpeed = Math.sqrt(dx * dx + dy * dy);
+  mouseSpeed = Math.min(mouseSpeed, 50);  // Cap the speed
+
+  mouseDistance = Math.sqrt((newMouseX - centerX) ** 2 + (newMouseY - centerY) ** 2);
+
+  mouseX = newMouseX;
+  mouseY = newMouseY;
+}, { passive: false });
+
+canvas.addEventListener('mouseleave', () => {
+  mouseSpeed = 0;
+});
+
+canvas.addEventListener('touchend', () => {
+  mouseSpeed = 0;
+});
