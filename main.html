@@ -565,3 +565,59 @@ canvas.addEventListener('mouseleave', () => {
 canvas.addEventListener('touchend', () => {
   mouseSpeed = 0;
 });
+
+// Hide instructions after 10 seconds
+setTimeout(() => {
+  instructions.style.transition = 'opacity 1s';
+  instructions.style.opacity = '0';
+}, 10000);
+</script>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #000;
+    font-family: Arial, sans-serif;
+  }
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  #fullscreenToggle, #audioToggle {
+    position: fixed;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+  #fullscreenToggle:hover, #audioToggle:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+  #fullscreenToggle {
+    bottom: 20px;
+    right: 20px;
+  }
+  #audioToggle {
+    bottom: 20px;
+    left: 20px;
+  }
+  #instructions {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    border-radius: 10px;
+    max-width: 300px;
+  }
+  </style>
+</body></html>
