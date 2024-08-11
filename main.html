@@ -349,3 +349,47 @@ function drawParticles(time) {
     ctx.fill();
   }
 }
+
+function drawNebula(time) {
+  const cloudCount = 5 + Math.floor(mouseSpeed / 5);
+  const maxRadius = Math.min(canvas.width, canvas.height) / 2;
+
+  for (let i = 0; i < cloudCount; i++) {
+    const angle = (Math.PI * 2 / cloudCount) * i + time / 5000;
+    const radius = maxRadius * (0.5 + 0.5 * Math.sin(time / 2000 + i));
+    const x = centerX + radius * Math.cos(angle);
+    const y = centerY + radius * Math.sin(angle);
+
+    const gradient = ctx.createRadialGradient(x, y, 0, x, y, maxRadius / 3);
+    gradient.addColorStop(0, `hsla(${(hue + i * 60) % 360}, 100%, 50%, 0.1)`);
+    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+    ctx.beginPath();
+    ctx.arc(x, y, maxRadius / 3, 0, Math.PI * 2);
+    ctx.fillStyle = gradient;
+    ctx.fill();
+  }
+}
+
+function drawLightning(time) {
+  const boltCount = 3 + Math.floor(mouseSpeed / 10);
+  const maxSegments = 10 + Math.floor(mouseDistance / 20);
+
+  for (let i = 0; i < boltCount; i++) {
+    ctx.beginPath();
+    ctx.moveTo(centerX, 0);
+
+    let x = centerX;
+    let y = 0;
+
+    for (let j = 0; j < maxSegments; j++) {
+      x += (Math.random() - 0.5) * (canvas.width / 10);
+      y += canvas.height / maxSegments;
+      ctx.lineTo(x, y);
+    }
+
+    ctx.strokeStyle = `hsla(${(hue + i * 120) % 360}, 100%, 80%, ${0.5 + 0.5 * Math.sin(time / 100 + i)})`;
+    ctx.lineWidth = 2 + mouseSpeed / 10;
+    ctx.stroke();
+  }
+}
